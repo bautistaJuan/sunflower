@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Trash2, Plus, Minus } from "lucide-react";
 
 const Cart = ({
@@ -7,7 +8,12 @@ const Cart = ({
   updateQuantity,
   removeFromCart,
   calculateTotal,
+  sendMessageToWhatsApp,
 }) => {
+  // const handleFinalCompra = () => {
+
+  // }
+
   return (
     <>
       {isCartOpen && (
@@ -74,6 +80,7 @@ const Cart = ({
                   className="w-full mt-4 bg-[#8A63D0] text-white 
                   py-2 rounded-full hover:bg-[#6A5ACD] 
                   transition-colors"
+                  onClick={sendMessageToWhatsApp}
                 >
                   Finalizar Compra
                 </button>

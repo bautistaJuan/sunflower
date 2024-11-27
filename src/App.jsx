@@ -2,9 +2,10 @@ import { useState } from "react";
 import Header from "./components/Header";
 import Cart from "./components/Cart";
 import ButtonCategory from "./components/ButtonCategory";
-import { products } from "./products";
-
-const category = ["todos", "aros", "anillos", "collares", "Utencilios"];
+import { products } from "./products.js";
+import Card from "./components/Card.jsx";
+const category = ["todos", "aros", "Ebillas", "Piercing"];
+const numWhatsApp = import.meta.env.VITE_WHATSAPP_NUMBER;
 
 const App = () => {
   const [activeFilter, setActiveFilter] = useState("todos");
@@ -15,6 +16,36 @@ const App = () => {
     activeFilter === "todos"
       ? products
       : products.filter(p => p.category === activeFilter);
+
+  const priceFormatter = price => {
+    return new Intl.NumberFormat("es-AR", {
+      style: "currency",
+      currency: "ARS",
+      minimumFractionDigits: 0,
+    }).format(price);
+  };
+  // Finalizar Compra
+
+  const sendMessageToWhatsApp = () => {
+    if (cart.length === 0) {
+      return "No hay productos en el carrito.";
+    }
+
+    let message = "🍒 Hola, me interesa comprar los siguientes productos:%0A";
+    cart.forEach(item => {
+      message += `• ${item.name} (Cantidad: ${
+        item.quantity
+      }) - ${priceFormatter(item.price)} ARS%0A`;
+    });
+
+    const total = cart.reduce(
+      (sum, item) => sum + item.price * item.quantity,
+      0
+    );
+    message += `%0ATotal: ${priceFormatter(total)} ARS`;
+    const url = `https://wa.me/${numWhatsApp}?text=${message}`;
+    window.open(url, "_blank");
+  };
 
   // Cart Logica
   const addToCart = product => {
@@ -56,7 +87,7 @@ const App = () => {
   };
   // Component
   return (
-    <div className="bg-[#F0E6FF] min-h-screen font-sans text-[#4A4A4A] relative">
+    <div className="bg-[#c236cf57] min-h-screen font-sans text-[#4A4A4A] relative">
       {/* Header */}
       <Header
         cart={cart}
@@ -71,6 +102,7 @@ const App = () => {
         removeFromCart={removeFromCart}
         updateQuantity={updateQuantity}
         calculateTotal={calculateTotal}
+        sendMessageToWhatsApp={sendMessageToWhatsApp}
       />
 
       <section className="p-4">
@@ -81,33 +113,11 @@ const App = () => {
         />
 
         {/* Productos */}
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-3">
-          {filteredProducts.map(producto => (
-            <div
-              key={producto.id}
-              className="bg-white rounded-lg shadow-md p-4 text-center 
-                hover:shadow-xl transition-all transform hover:scale-105"
-            >
-              <img
-                src={producto.image}
-                alt={producto.name}
-                className="w-full h-40 object-cover rounded-md mb-4"
-              />
-              <h3 className="font-bold text-[#4A4A4A]">{producto.name}</h3>
-              <p className="text-[#8A63D0] font-semibold">${producto.price}</p>
-              <button
-                onClick={() => addToCart(producto)}
-                className="mt-2 bg-[#E6D5FF] text-[#6A5ACD] 
-                px-4 py-2 rounded-full hover:bg-[#8A63D0] 
-                hover:text-white transition-colors
-                focus:outline-none focus:ring-2 focus:ring-[#6A5ACD] 
-                focus:ring-opacity-50"
-              >
-                Añadir al Carrito
-              </button>
-            </div>
-          ))}
-        </div>
+        <Card
+          addToCart={addToCart}
+          filteredProducts={filteredProducts}
+          priceFormatter={priceFormatter}
+        />
       </section>
     </div>
   );

@@ -2,10 +2,10 @@ import { ShoppingCart, Heart } from "lucide-react";
 
 const Header = ({ cart, setIsCartOpen, isCartOpen }) => {
   return (
-    <header className="bg-[#E6D5FF] p-4 shadow-md flex justify-between items-center">
-      <div className="text-2xl font-bold text-[#6A5ACD] tracking-wide">
+    <header className="bg-[#ca308f60] p-4 shadow-md flex justify-between items-center">
+      <div className="text-2xl font-bold text-[#ffffff] tracking-wide">
         Cherry 🍒 <br />
-        Accessories
+        Accesorios
       </div>
       <div className="flex space-x-4 relative">
         <div className="relative">
@@ -17,7 +17,7 @@ const Header = ({ cart, setIsCartOpen, isCartOpen }) => {
           />
           {cart.length > 0 && (
             <span
-              className="absolute -top-2 -right-2 bg-[#8A63D0] 
+              className="absolute -top-2 -right-2 bg-[#c763d0] 
               text-white rounded-full w-5 h-5 flex items-center 
               justify-center text-xs"
             >
